@@ -57,7 +57,7 @@ RUN curl https://install.meteor.com/ | sh
 
 RUN curl -sL https://deb.nodesource.com/setup_4.x | bash -
 RUN apt-get install -y nodejs
-RUN npm install -g npm
+RUN npm install npm -g
 
 # Create default keystore (user should provide her own)
 
