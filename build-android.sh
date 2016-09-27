@@ -37,12 +37,15 @@ cd ${TMP_BUILD_PATH}
 
 echo "Signing and preparing APK for release..."
 
-mv android/release-unsigned.apk ./
+APK_UNSIGNED_FILE_NAME=$(ls ./android | grep ".apk" | head -n 1)
 
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ${KEYSTORE_FILE_PATH} \
-    -keypass ${KEYSTORE_KEYPASS} -storepass ${KEYSTORE_STOREPASS} release-unsigned.apk ${KEYSTORE_ALIAS}
+mv ./android/${APK_UNSIGNED_FILE_NAME} ./
 
-${ANDROID_HOME}/build-tools/*/zipalign 4 release-unsigned.apk ${APK_FILE_NAME}
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 \
+    -keystore ${KEYSTORE_FILE_PATH} -keypass ${KEYSTORE_KEYPASS} \
+    -storepass ${KEYSTORE_STOREPASS} ${APK_UNSIGNED_FILE_NAME} ${KEYSTORE_ALIAS}
+
+${ANDROID_HOME}/build-tools/*/zipalign 4 ${APK_UNSIGNED_FILE_NAME} ${APK_FILE_NAME}
 
 mv ./${APK_FILE_NAME} ${APP_BUILD_PATH}
 
