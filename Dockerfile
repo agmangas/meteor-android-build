@@ -22,11 +22,12 @@ ENV KEYSTORE_VALIDITY 10000
 
 ENV APP_PATH /app
 ENV APP_BUILD_PATH /build
+ENV SCRIPTS_PATH /scripts
 
 # Install package dependencies
 
 RUN apt-get update && apt-get install -y openjdk-8-jdk wget curl build-essential chrpath \
-    libssl-dev libxft-dev libfreetype6 libfreetype6-dev libfontconfig1 libfontconfig1-dev
+    libssl-dev libxft-dev libfreetype6 libfreetype6-dev libfontconfig1 libfontconfig1-dev python
 
 # Download and extract the Android SDK
 
@@ -49,16 +50,6 @@ RUN echo "y" | tools/android update sdk --no-ui --filter $ANDROID_SDK_FILTER
 ENV ANDROID_HOME $ANDROID_SDK_PATH/android-sdk-linux
 ENV PATH $PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
 
-# Install Meteor
-
-RUN curl https://install.meteor.com/ | sh
-
-# Install Node
-
-RUN curl -sL https://deb.nodesource.com/setup_4.x | bash -
-RUN apt-get install -y nodejs
-RUN npm install npm -g
-
 # Create default keystore (user should provide her own)
 
 ENV KEYSTORE_FILE_PATH $KEYSTORE_PATH/$KEYSTORE_FILE_NAME
@@ -68,6 +59,16 @@ RUN mkdir -p $KEYSTORE_PATH
 RUN keytool -genkey -noprompt -alias $KEYSTORE_ALIAS -dname "$KEYSTORE_DNAME" \
     -keystore $KEYSTORE_FILE_PATH -storepass $KEYSTORE_STOREPASS -keypass $KEYSTORE_KEYPASS \
     -keyalg $KEYSTORE_KEYALG -keysize $KEYSTORE_KEYSIZE -validity $KEYSTORE_VALIDITY
+
+# Install Meteor and Node
+
+RUN mkdir -p $SCRIPTS_PATH
+
+WORKDIR $SCRIPTS_PATH
+
+COPY ./install-node-meteor.sh ./
+RUN chmod +x ./install-node-meteor.sh
+RUN /bin/bash ./install-node-meteor.sh
 
 # Initialize the build folder
 
