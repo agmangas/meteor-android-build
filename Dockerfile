@@ -27,7 +27,7 @@ ENV SCRIPTS_PATH /scripts
 # Temporal fix for:
 # https://github.com/docker/hub-feedback/issues/727
 
-RUN apt-get install -y --no-install-recommends bsdtar
+RUN apt-get update && apt-get install -y --no-install-recommends bsdtar
 RUN export tar='bsdtar'
 
 # Install package dependencies
