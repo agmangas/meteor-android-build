@@ -39,7 +39,7 @@ RUN chmod -R +x .
 # Install package dependencies
 
 RUN apt-get update && apt-get install -y openjdk-8-jdk wget curl build-essential chrpath \
-    libssl-dev libxft-dev libfreetype6 libfreetype6-dev libfontconfig1 libfontconfig1-dev python
+    libssl-dev libxft-dev libfreetype6 libfreetype6-dev libfontconfig1 libfontconfig1-dev python git
 
 # Install Meteor and Node
 
