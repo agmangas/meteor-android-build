@@ -24,16 +24,28 @@ ENV APP_PATH /app
 ENV APP_BUILD_PATH /build
 ENV SCRIPTS_PATH /scripts
 
-# Temporal fix for:
-# https://github.com/docker/hub-feedback/issues/727
+# Copy scripts
 
-RUN apt-get update && apt-get install -y --no-install-recommends bsdtar
-RUN export tar='bsdtar'
+RUN mkdir -p $SCRIPTS_PATH
+
+WORKDIR $SCRIPTS_PATH
+
+COPY ./install-node-meteor.sh ./
+COPY ./tar-override.sh ./
+COPY ./tar-restore.sh ./
+
+RUN chmod -R +x .
 
 # Install package dependencies
 
 RUN apt-get update && apt-get install -y openjdk-8-jdk wget curl build-essential chrpath \
     libssl-dev libxft-dev libfreetype6 libfreetype6-dev libfontconfig1 libfontconfig1-dev python
+
+# Install Meteor and Node
+
+WORKDIR $SCRIPTS_PATH
+
+RUN bash ./install-node-meteor.sh
 
 # Download and extract the Android SDK
 
@@ -65,16 +77,6 @@ RUN mkdir -p $KEYSTORE_PATH
 RUN keytool -genkey -noprompt -alias $KEYSTORE_ALIAS -dname "$KEYSTORE_DNAME" \
     -keystore $KEYSTORE_FILE_PATH -storepass $KEYSTORE_STOREPASS -keypass $KEYSTORE_KEYPASS \
     -keyalg $KEYSTORE_KEYALG -keysize $KEYSTORE_KEYSIZE -validity $KEYSTORE_VALIDITY
-
-# Install Meteor and Node
-
-RUN mkdir -p $SCRIPTS_PATH
-
-WORKDIR $SCRIPTS_PATH
-
-COPY ./install-node-meteor.sh ./
-RUN chmod +x ./install-node-meteor.sh
-RUN bash ./install-node-meteor.sh
 
 # Initialize the build folder
 
