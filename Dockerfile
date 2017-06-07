@@ -49,7 +49,7 @@ RUN rm -fr android-sdk.tar.gz
 
 WORKDIR $ANDROID_SDK_PATH/android-sdk-linux
 
-RUN echo "y" | tools/android update sdk --no-ui --filter $ANDROID_SDK_FILTER
+RUN echo "y" | tools/android update sdk --no-ui --all --filter $ANDROID_SDK_FILTER
 
 # Update Android SDK environment variables
 
