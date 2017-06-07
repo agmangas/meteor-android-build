@@ -2,9 +2,9 @@ FROM ubuntu:16.04
 
 # Android SDK variables
 
-ENV ANDROID_SDK_URL https://dl.google.com/android/android-sdk_r24.4.1-linux.tgz
+ENV ANDROID_SDK_URL https://dl.google.com/android/repository/tools_r25.2.5-linux.zip
 ENV ANDROID_SDK_PATH /android
-ENV ANDROID_SDK_FILTER platform-tool,android-23,build-tools-24.0.2
+ENV ANDROID_SDK_FILTER platform-tool,android-25,build-tools-25.0.2
 
 # Keystore variables
 
@@ -38,8 +38,9 @@ RUN chmod -R +x .
 
 # Install package dependencies
 
-RUN apt-get update && apt-get install -y openjdk-8-jdk wget curl build-essential chrpath \
-    libssl-dev libxft-dev libfreetype6 libfreetype6-dev libfontconfig1 libfontconfig1-dev python git
+RUN apt-get update && apt-get install -y openjdk-8-jdk wget curl \
+	build-essential chrpath libssl-dev libxft-dev libfreetype6 \
+	libfreetype6-dev libfontconfig1 libfontconfig1-dev python git unzip
 
 # Install Meteor and Node
 
@@ -53,9 +54,9 @@ RUN mkdir -p $ANDROID_SDK_PATH
 
 WORKDIR $ANDROID_SDK_PATH
 
-RUN wget $ANDROID_SDK_URL -O android-sdk.tar.gz
-RUN tar xvfz android-sdk.tar.gz
-RUN rm -fr android-sdk.tar.gz
+RUN wget $ANDROID_SDK_URL -O android-sdk.zip
+RUN unzip android-sdk.zip -d android-sdk-linux
+RUN rm -fr android-sdk.zip
 
 # Install the Android SDK
 
