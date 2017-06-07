@@ -1,6 +1,6 @@
 # Meteor Android Docker image
 
-This repository contains a Docker image with an environment prepared to build Cordova-based Android APKs from Meteor projects. It has been tested and should work with both Meteor 1.3 and 1.4. 
+This repository contains a Docker image with an environment prepared to build Cordova-based Android APKs from Meteor projects.
 
 Please make sure you've actually added the `android` platform to your Meteor app using the `meteor add-platform` command or the build process will fail.
 
