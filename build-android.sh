@@ -31,7 +31,7 @@ npm install
 
 echo "Building Meteor app..."
 
-meteor build ${TMP_BUILD_PATH} --server ${APP_SERVER}
+meteor build --allow-superuser ${TMP_BUILD_PATH} --server ${APP_SERVER}
 
 cd ${TMP_BUILD_PATH}
 
