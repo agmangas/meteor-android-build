@@ -24,6 +24,12 @@ ENV APP_PATH /app
 ENV APP_BUILD_PATH /build
 ENV SCRIPTS_PATH /scripts
 
+# Temporal fix for:
+# https://github.com/docker/hub-feedback/issues/727
+
+RUN apt-get install -y --no-install-recommends bsdtar
+RUN export tar='bsdtar'
+
 # Install package dependencies
 
 RUN apt-get update && apt-get install -y openjdk-8-jdk wget curl build-essential chrpath \
@@ -68,7 +74,7 @@ WORKDIR $SCRIPTS_PATH
 
 COPY ./install-node-meteor.sh ./
 RUN chmod +x ./install-node-meteor.sh
-RUN /bin/bash ./install-node-meteor.sh
+RUN bash ./install-node-meteor.sh
 
 # Initialize the build folder
 
